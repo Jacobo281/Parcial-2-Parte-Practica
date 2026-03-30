@@ -281,7 +281,7 @@ void mostrarCatalogo(const ListaDoble &lista) {
 }
 
 // ============================================================
-//  OPCION 2: Agregar producto
+//  OPCION 2: Agregar producto (BLINDADA)
 // ============================================================
 void agregarProducto(ListaDoble &lista, TablaHash &tabla) {
   Producto p;
@@ -289,20 +289,41 @@ void agregarProducto(ListaDoble &lista, TablaHash &tabla) {
 
   cout << "\n--- AGREGAR NUEVO PRODUCTO (ID asignado: " << p.id << ") ---\n";
   cout << "Nombre: ";
-  cin.ignore();
+
+  // Limpiamos el buffer antes de leer el string para evitar saltos de linea
+  // fantasma
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
   getline(cin, p.nombre);
   p.nombre = trim(p.nombre);
+
   cout << "Precio (COP, entero): ";
-  cin >> p.precio;
+  // Ciclo que atrapa letras o numeros negativos
+  while (!(cin >> p.precio) || p.precio < 0) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "[ERROR] Entrada invalida. Ingrese un precio numerico positivo: ";
+  }
+
   cout << "Cantidad: ";
-  cin >> p.cantidad;
+  while (!(cin >> p.cantidad) || p.cantidad < 0) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout
+        << "[ERROR] Entrada invalida. Ingrese una cantidad numerica positiva: ";
+  }
 
   cout << "\nCategorias disponibles:\n";
   cout << "  [1] Electronica   [2] Ropa   [3] Hogar   [4] Deportes   [5] "
           "Alimentos\n";
+
   int opCat;
   cout << "Categoria: ";
-  cin >> opCat;
+  // Validamos que sea un numero y que este entre 1 y 5
+  while (!(cin >> opCat) || opCat < 1 || opCat > 5) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "[ERROR] Invalido. Seleccione una categoria entre 1 y 5: ";
+  }
 
   vector<string> tipos;
   switch (opCat) {
@@ -326,19 +347,20 @@ void agregarProducto(ListaDoble &lista, TablaHash &tabla) {
     p.categoria = "Alimentos";
     tipos = {"Perecedero", "No Perecedero", "Bebida"};
     break;
-  default:
-    cout << "[ERROR] Categoria invalida.\n";
-    return;
   }
+
   cout << "Tipos para " << p.categoria << ":\n";
   for (int i = 0; i < (int)tipos.size(); i++)
     cout << "  [" << i + 1 << "] " << tipos[i] << "\n";
+
   int opTipo;
   cout << "Tipo: ";
-  cin >> opTipo;
-  if (opTipo < 1 || opTipo > (int)tipos.size()) {
-    cout << "[ERROR] Tipo invalido.\n";
-    return;
+  // Validamos dinamicamente segun la cantidad de tipos disponibles
+  while (!(cin >> opTipo) || opTipo < 1 || opTipo > (int)tipos.size()) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "[ERROR] Invalido. Seleccione un tipo entre 1 y " << tipos.size()
+         << ": ";
   }
   p.tipo = tipos[opTipo - 1];
 
@@ -353,7 +375,7 @@ void agregarProducto(ListaDoble &lista, TablaHash &tabla) {
 // ============================================================
 void buscarPorNombre(const ListaDoble &lista) {
   cout << "Texto a buscar: ";
-  cin.ignore();
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
   string clave;
   getline(cin, clave);
   clave = trim(clave);
@@ -382,7 +404,13 @@ void filtrarPorCategoria(const TablaHash &tabla) {
           "Alimentos\n";
   int op;
   cout << "Categoria: ";
-  cin >> op;
+  // Proteccion basica
+  while (!(cin >> op) || op < 1 || op > 5) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "[ERROR] Opcion invalida. Intente de nuevo: ";
+  }
+
   string cat;
   switch (op) {
   case 1:
@@ -400,10 +428,8 @@ void filtrarPorCategoria(const TablaHash &tabla) {
   case 5:
     cat = "Alimentos";
     break;
-  default:
-    cout << "[ERROR] Opcion invalida.\n";
-    return;
   }
+
   auto it = tabla.find(cat);
   if (it == tabla.end() || it->second.empty()) {
     cout << "[INFO] No hay productos en '" << cat << "'.\n";
@@ -421,8 +447,10 @@ void filtrarPorCategoria(const TablaHash &tabla) {
 //  OPCION 5/6: Ordenar catalogo
 // ============================================================
 void ordenarCatalogo(ListaDoble &lista, bool porPrecio) {
-  if (lista.tam < 2)
+  if (lista.tam < 2) {
+    cout << "[INFO] No hay suficientes productos para ordenar.\n";
     return;
+  }
   vector<Nodo *> v = lista.aVector();
   mergeSort(v, 0, v.size() - 1, porPrecio);
   lista.reconstruirDesdeVector(v);
@@ -433,14 +461,22 @@ void ordenarCatalogo(ListaDoble &lista, bool porPrecio) {
 }
 
 // ============================================================
-//  OPCION 7: Top-N por precio (recursivo)
+//  OPCION 7: Top-N por precio (recursivo - BLINDADA)
 // ============================================================
 void topNPorPrecio(ListaDoble &lista) {
   int n;
   cout << "Cuantos productos mostrar (N): ";
-  cin >> n;
-  if (n <= 0) {
-    cout << "[ERROR] N debe ser positivo.\n";
+
+  // Protegemos contra letras o numeros menores o iguales a 0
+  while (!(cin >> n) || n <= 0) {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "[ERROR] Entrada invalida. Por favor ingrese un numero entero "
+            "mayor a 0: ";
+  }
+
+  if (lista.tam == 0) {
+    cout << "[INFO] El catalogo esta vacio.\n";
     return;
   }
 
@@ -509,7 +545,7 @@ int main() {
   while (opcion != 0) {
     mostrarMenu();
 
-    // --- BLOQUE CORREGIDO ---
+    // --- BLOQUE CORREGIDO: Proteccion del menu principal ---
     if (!(cin >> opcion)) {
       cin.clear(); // Limpia el estado de error de cin
       cin.ignore(numeric_limits<streamsize>::max(),
@@ -518,7 +554,7 @@ int main() {
       cout << "\n[ERROR] Entrada invalida. Por favor ingrese un numero.\n";
       continue;
     }
-    // ------------------------
+    // -------------------------------------------------------
 
     switch (opcion) {
     case 1:
