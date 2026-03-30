@@ -1,0 +1,22 @@
+1,Monitor 24 Pulgadas,649900,45,Electronica,Computador
+2,Teclado Mecanico RGB,189900,120,Electronica,Accesorio
+3,Mouse Inalambrico,79900,200,Electronica,Accesorio
+4,Laptop Core i5,2499900,30,Electronica,Computador
+5,Camisa Oxford Manga Larga,89900,85,Ropa,Camisa
+6,Pantalon Jean Slim Fit,149900,60,Ropa,Pantalon
+7,Zapatillas Running Pro,299900,40,Ropa,Calzado
+8,Sofa Esquinero 3 Puestos,1850000,8,Hogar,Mueble
+9,Arroz Integral 1kg,12900,300,Alimentos,No Perecedero
+10,Celular Samsung Galaxy A35,1299900,55,Electronica,Celular
+11,Disco Duro SSD 500GB,249900,90,Electronica,Computador
+12,Audifonos Bluetooth,149900,150,Electronica,Accesorio
+13,Camiseta Polo Slim,59900,110,Ropa,Camisa
+14,Pantaloneta Deportiva,49900,95,Deportes,Ropa Deportiva
+15,Licuadora 800W,189900,35,Hogar,Electrodomestico
+16,Aceite de Oliva 500ml,35900,180,Alimentos,No Perecedero
+17,Celular iPhone 15,4999900,20,Electronica,Celular
+18,Balon de Futbol,89900,70,Deportes,Equipamiento
+19,Mesa de Comedor 6 Puestos,1250000,5,Hogar,Mueble
+20,Leche Entera 1L,4900,500,Alimentos,Perecedero
+21,Tarjeta Grafica RTX 4060,2199900,15,Electronica,Computador
+22,Webcam Full HD 1080p,149900,6

@@ -202,9 +202,9 @@ void imprimirNodo(const Nodo *n) {
 }
 
 // ============================================================
-//  CARGA DEL CSV
+//  CARGA DEL TXT
 // ============================================================
-bool cargarCSV(const string &archivo, ListaDoble &lista, TablaHash &tabla) {
+bool cargarTXT(const string &archivo, ListaDoble &lista, TablaHash &tabla) {
   ifstream f(archivo);
   if (!f.is_open()) {
     cout << "[ERROR] No se pudo abrir: " << archivo << "\n";
@@ -533,11 +533,11 @@ int main() {
   cout << "=================================================================\n";
   cout << "  SISTEMA DE CATALOGO DE PRODUCTOS - Ingreso de datos           \n";
   cout << "=================================================================\n";
-  cout << "  Nombre del archivo CSV (ej. BaseDeDatos.csv): ";
+  cout << "  Nombre del archivo TXT (ej. BaseDeDatos.txt): ";
   string archivo;
   cin >> archivo;
 
-  if (!cargarCSV(archivo, lista, tabla)) {
+  if (!cargarTXT(archivo, lista, tabla)) {
     cout << "[INFO] Iniciando con catalogo vacio.\n";
   }
 
